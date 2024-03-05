@@ -1,0 +1,49 @@
+import datetime
+import streamlit as st
+
+st.set_page_config(
+   page_title="行動服務",
+   page_icon="random",
+   layout="centered",
+   initial_sidebar_state="expanded",
+   menu_items={
+    }
+)
+
+with st.form("my_form"):
+   #st.write("Inside the form")
+   option = st.selectbox(
+    '使用場所？',
+    ['主樓大廳', '副樓大廳', '204簡報室', '208會議室'],key='room')
+  
+   
+
+   inputdate=st.date_input('使用日期',datetime.date.today(),key='date')
+
+   option = st.selectbox(
+    '使用時間？',
+    ['09:00', '10:00', '11:00', '13:00'],key='time')
+   
+
+   st.text_input('輸入姓名：',key='name')
+
+   st.text_input('姓名代號：',key='number')
+
+   if st.form_submit_button(label='確認提交'):
+      room=st.session_state['room']
+      date=st.session_state['date']
+      time=st.session_state['time']
+      name=st.session_state['name']
+      number=st.session_state['number']
+      st.write(f'已提交:姓名為{name},姓名代號為{number}')
+      import requests
+      url = 'https://script.google.com/macros/s/AKfycbzsykcqzdQ3gz6IbGj26ybhN4Py98OG-PQ-g4nsNHGwgbfa-ORY-QjZ5vcR1ScgMKvQPg/exec'
+      params = {
+          'name':'工作表1',
+          'top':'true',
+          'data':'[{room},{date},{time},{name},{number}]'
+          }
+      web = requests.get(url=url, params=params)
+
+      #if st.button('確認提交'):
+         #st.write('感謝您的申請！')
